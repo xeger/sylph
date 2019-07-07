@@ -1,24 +1,37 @@
 # Sylph
 
-TODO: describe me.
+This is a tiny but full-featured bootstrapper/loader for single-page
+applications. To use it, simply load it using a `<script src=>` tag
+on your index page.
+
+Sylph is configured using meta tags in the `head` section of the page
+into which it is loaded. the following meta tags are supported:
+
+description
+: App name displayed while loading.
+author
+: Creator/copyright info displayed while loading.
+application-roots
+: Comma-separated list of absolute base URLs for application files (no trailing slash)
+application-files
+: Comma-separated list of subpaths to CSS and script files (no leading slash)
 
 ## Get started
 
-Install the dependencies...
-
-```bash
-cd sylph
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
+Start [Rollup](https://rollupjs.org):
 
 ```bash
 npm run dev
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+Navigate to [localhost:5000](http://localhost:5000).
+You will briefly see a spinner, then the screen will turn black because
+the dummy app has been loaded.
 
+Edit index.html and change the root or files to refer to something
+nonexistent; notice that Sylph displays an error. Use dev tools to
+slow down the network; notice that Sylph displays a splash screen
+with a spinner.
 
 ## Deploying to the web
 
