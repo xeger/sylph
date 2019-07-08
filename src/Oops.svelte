@@ -3,19 +3,7 @@
   export let message = "Sorry, something went wrong. Try reloading.";
 </script>
 
-<style>
-  .oops {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    text-align: center;
-  }
-</style>
-
-<div class="oops">
+<div id="sylph" class="oops">
   <svg
     width="8em"
     height="8em"
@@ -30,5 +18,8 @@
       22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10
       18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z" />
   </svg>
-  <div> {message} </div>
+  <div class="msg"> {message} </div>
+  <div class="act">
+    <button on:click={window.location.reload}>Reload Page</button>
+  </div>
 </div>
