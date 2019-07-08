@@ -18,8 +18,12 @@
       22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10
       18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z" />
   </svg>
-  <div class="msg"> {message} </div>
+  <div class="msg">
+    Oops! Something went wrong trying to load this page.
+    <br />
+    <tt>{message}</tt>
+  </div>
   <div class="act">
-    <button on:click={window.location.reload}>Reload Page</button>
+    <button on:click={() => window.location.reload()}>Reload Page</button>
   </div>
 </div>

@@ -12,6 +12,11 @@
   let loaded = 0;
   let err = null;
 
+  function onError(event) {
+    err = event.message;
+  }
+
+  window.addEventListener("error", onError);
   files.forEach(file => {
     const tryLoad = i => {
       if (i < roots.length) {
@@ -19,6 +24,8 @@
           .loadContent(`${roots[i]}/${file}`)
           .then(() => {
             loaded += 1;
+            if (loaded >= files.length)
+              window.removeEventListener("error", onError);
           })
           .catch(() => {
             log.info(`no '${file}' at ${roots[i]}`);
