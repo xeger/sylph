@@ -1,3 +1,5 @@
+const tag = '[sylph]';
+
 let isDebug = false;
 
 export function setDebug(d) {
@@ -5,13 +7,13 @@ export function setDebug(d) {
 }
 
 export function debug(...args) {
-  if (isDebug) console.log('sylph:', ...args);
+  if (isDebug) console.log(tag, ...args);
 }
 
 export function info(...args) {
-  console.log('sylph:', ...args);
+  console.log(tag, ...args);
 }
 
 export function error(...args) {
-  console.error('sylph:', ...args);
+  console.error(tag, ...args);
 }

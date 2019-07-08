@@ -1,0 +1,5 @@
+- support qs directives for loading different root/base
+    - <meta name="application-query-base" content="ui=*->branches/*">
+    - process all directives at startup; override other meta config
+    - save to localStorage (& reload on future loads)
+- look into CSS variables for themes

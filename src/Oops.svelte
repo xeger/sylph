@@ -19,7 +19,7 @@
       18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z" />
   </svg>
   <div class="msg">
-    Oops! Something went wrong trying to load this page.
+    Sorry; something went wrong trying to load this page.
     <br />
     <tt>{message}</tt>
   </div>

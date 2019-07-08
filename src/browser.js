@@ -43,20 +43,20 @@ export function createTag(src) {
 /**
  * Return the string content of a meta tag, or null if undefined.
  */
-export function getMeta(name) {
+export function getMeta(name, def) {
   const tag = document.head.querySelector(`meta[name~=${name}][content]`);
   if (tag) return tag.content;
-  return null;
+  return def;
 }
 
 /**
  * Return an array with the comma-separated pieces of a meta tag's
  * content, or empty array if undefined/blank.
  */
-export function getMetaN(name) {
+export function getMetaN(name, def) {
   let str = getMeta(name);
   if (str) return str.split(',');
-  return [];
+  return def;
 }
 
 /**
