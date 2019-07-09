@@ -1,7 +1,6 @@
 <script>
   import * as browser from "./browser";
   import * as log from "./log";
-  import * as path from "./path";
   import Oops from "./Oops.svelte";
   import Splash from "./Splash.svelte";
 
@@ -20,26 +19,25 @@
     onError(event);
   }
 
-  // First things first: never let an error go unreported!
-  window.addEventListener("error", onError);
-  window.addEventListener("unhandledrejection", onErrorLog);
-
   // Async helper that tries to load one file from one base.
-  const { root, bases, files } = application;
+  const { bases, debug, files, root } = application;
+
   function tryFileBase(i, j) {
     if (j < bases.length) {
-      log.info("try", path.join(root, bases[j], files[i]));
+      const loc = browser.joinPath(root, bases[j], files[i])
+      log.debug("try", loc);
       return browser
-        .loadContent(path.join(root, bases[j], files[i]))
+        .loadContent(loc)
         .catch(() => tryFileBase(i, j + 1));
     } else {
-      log.info("give up after", i, j, "; bases.length =", bases.length);
+      log.debug(`give up ${files[i]} after ${bases.length} tries`);
       throw new Error(`cannot locate ${files[i]}`);
     }
   }
 
   // Load the files one at a time, in order, trying every base for
   // every file.
+  log.setDebug(debug);
   let promise = Promise.resolve(true);
   for (let i in files) {
     promise = promise
@@ -51,8 +49,6 @@
   }
   promise.then(() => {
     done = true;
-    window.removeEventListener("error", onError);
-    window.removeEventListener("unhandledrejection", onErrorLog);
   });
 </script>
 

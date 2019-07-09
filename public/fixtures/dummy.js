@@ -1,3 +1,1 @@
-// throw new Error('hey hey');
-
-document.body.appendChild(document.createTextNode('I am a happy app.'));
+document.body.appendChild(document.createTextNode('I am an app.'));

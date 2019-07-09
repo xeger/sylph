@@ -4,9 +4,7 @@
  */
 export function consumeQuery(location, name) {
   const { search } = location;
-  const pattern = new RegExp(`(\\?|&)${name}=(.+?)(&|$)`);
-  const result = search.match(pattern);
-
+  const result = search.match(new RegExp(`(\\?|&)${name}(=.+)?(&|$)`));
   if (result) {
     const updatedURL = [
       window.location.origin,
@@ -15,7 +13,7 @@ export function consumeQuery(location, name) {
     ].join('');
     window.history.replaceState({}, null, updatedURL);
 
-    return result[2];
+    return result[2] ? result[2].slice(1) : '';
   }
 
   return null;
@@ -38,6 +36,20 @@ export function createTag(src) {
   }
 
   return tag;
+}
+
+export function joinPath(...components) {
+  let result = components[0];
+
+  components.slice(1).forEach(c => {
+    const slash1 = result.endsWith('/');
+    const slash2 = c.startsWith('/');
+    if (!slash1 && !slash2) result = `${result}/${c}`;
+    else if (slash1 && slash2) result = `${result}${c.slice(1)}`;
+    else result = `${result}${c}`;
+  });
+
+  return result;
 }
 
 /**
@@ -77,11 +89,26 @@ export function loadContent(src) {
       tag.crossOrigin = 'anonymous';
     }
 
-    tag.addEventListener('error', () => {
+    let cleanup = () => true;
+    const onError = () => {
+      cleanup();
       tag.remove();
       reject(src);
-    });
-    tag.addEventListener('load', () => resolve(src));
+    };
+    const onLoad = () => {
+      cleanup(true);
+      resolve(src);
+    };
+
+    window.addEventListener('error', onError);
+    window.addEventListener('unhandledrejection', onError);
+    cleanup = success => {
+      window.removeEventListener('error', onError);
+      window.removeEventListener('unhandledrejection', onError);
+      if (!success) tag.remove();
+    };
+    tag.addEventListener('error', onError);
+    tag.addEventListener('load', onLoad);
 
     document.body.appendChild(tag);
   });
@@ -96,4 +123,18 @@ export function removeAll(selector) {
     el = document.body.querySelector(selector);
     if (el) el.remove();
   } while (el);
+}
+
+/**
+ * Detect a configuration override in the query string, if present,
+ * and apply the specified rewrite rule to derive a new value for
+ * some configuration parameter. Remove the matching QS parameter
+ * (if found) before returning.
+ */
+export function applyQueryRule(location, rule) {
+  const [paramName, transform] = rule.split('=>', 2);
+
+  const value = consumeQuery(location, paramName);
+  if (value === null) return null;
+  return transform.replace('*', value);
 }
