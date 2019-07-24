@@ -1,3 +1,5 @@
-- in progress: support qs directives for loading different root/base
-    - save to localStorage (& reload on future visits)
+- localStorage support
+    - store root alongside bases
+    - mechanism for clearing all keys (button on Oops?)
+- attr to add qs to JS assets (e.g. `sockPort=XYZ)
 - look into CSS variables for themes
