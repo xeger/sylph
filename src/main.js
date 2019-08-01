@@ -38,7 +38,16 @@ if (storage) {
 const rootRule = browser.getMeta('application-query-root');
 if (rootRule) {
   const newRoot = browser.applyQueryRule(window.location, rootRule);
-  if (newRoot != null) root = newRoot;
+  if (newRoot != null) {
+    root = newRoot;
+    if (storage) localStorage.setItem(`${storage}.root`, JSON.stringify(bases));
+  }
+}
+
+// New resource root in local storage
+if (storage) {
+  const storedRoot = localStorage.getItem(`${storage}.root`);
+  if (storedRoot) root = JSON.parse(storedRoot);
 }
 
 // Kick off the main event.

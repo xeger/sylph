@@ -1,6 +1,22 @@
 <script>
+  import * as browser from "./browser";
+  import * as log from "./log";
+
   export let color1 = "#ff0000";
   export let message = "Sorry, something went wrong. Try reloading.";
+
+  function reload() {
+    try {
+      const storage = browser.getMeta("application-storage");
+      if (storage) {
+        localStorage.removeItem(`${storage}.queryBase`);
+        localStorage.removeItem(`${storage}.root`);
+      }
+    } catch (err) {
+      log.error(err);
+    }
+    window.location.reload();
+  }
 </script>
 
 <div id="sylph" class="oops">
@@ -24,6 +40,6 @@
     <tt>{message}</tt>
   </div>
   <div class="act">
-    <button on:click={() => window.location.reload()}>Reload Page</button>
+    <button on:click={reload}>Reload Page</button>
   </div>
 </div>
