@@ -1,2 +1,1 @@
-- attr to add qs to JS assets (e.g. `sockPort=XYZ)
 - look into CSS variables for themes

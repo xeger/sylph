@@ -20,15 +20,14 @@
   }
 
   // Async helper that tries to load one file from one base.
-  const { bases, debug, files, root } = application;
+  const { assetQuery, bases, debug, files, root } = application;
 
   function tryFileBase(i, j) {
     if (j < bases.length) {
-      const loc = browser.joinPath(root, bases[j], files[i])
+      let loc = browser.joinPath(root, bases[j], files[i]);
+      if (assetQuery) loc = `${loc}?${assetQuery}`;
       log.debug("try", loc);
-      return browser
-        .loadContent(loc)
-        .catch(() => tryFileBase(i, j + 1));
+      return browser.loadContent(loc).catch(() => tryFileBase(i, j + 1));
     } else {
       log.debug(`give up ${files[i]} after ${bases.length} tries`);
       throw new Error(`cannot locate ${files[i]}`);

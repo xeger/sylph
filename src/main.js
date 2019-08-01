@@ -6,6 +6,7 @@ const author = browser.getMeta('author');
 const description = browser.getMeta('description');
 
 // Sylph custom metas (named using "application-" prefix for compliance.)
+const assetQuery = browser.getMeta('application-asset-query');
 let bases = browser.getMetaN('application-bases', ['/']);
 const debug = !!browser.getMeta('application-debug');
 let files = browser.getMetaN('application-files', ['main.js']);
@@ -51,7 +52,7 @@ if (storage) {
 }
 
 // Kick off the main event.
-const application = { bases, debug, files, root };
+const application = { assetQuery, bases, debug, files, root };
 const app = new App({
   target: document.body,
   props: { application, author, description },
