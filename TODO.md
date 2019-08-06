@@ -1,1 +1,3 @@
+- use single storage key for all needs
+  - "all or none" QS semantics (entirely replace old key when any param present)
 - look into CSS variables for themes
