@@ -19,7 +19,41 @@
   }
 </script>
 
-<div id="sylph" class="oops">
+<style>
+  button {
+    color: #333;
+    background-color: #f4f4f4;
+    outline: none;
+  }
+
+  button:active {
+    background-color: #ddd;
+  }
+
+  button:focus {
+    border-color: #666;
+  }
+
+  .msg {
+    padding: 0.5rem 0;
+  }
+
+  .msg tt {
+    color: #7f7f7f;
+  }
+
+  .act {
+    padding: 0.5rem 0;
+  }
+
+  svg * {
+    fill: red;
+    stroke: red;
+    stroke-width: 3;
+  }
+</style>
+
+<div id="sylph">
   <svg
     width="8em"
     height="8em"

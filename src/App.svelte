@@ -51,6 +51,19 @@
   });
 </script>
 
+<style>
+  :global(#sylph) {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    text-align: center;
+  }
+</style>
+
 {#if err}
   <Oops message={err} />
 {:else if !done}

@@ -3,7 +3,27 @@
   export let description;
 </script>
 
-<div id="sylph" class="splash">
+<style>
+  svg * {
+    fill: none;
+  }
+
+  svg *.stroke-primary {
+    stroke: #0c99db;
+    stroke-width: 3;
+  }
+
+  svg *.stroke-muted {
+    stroke: #bfe8fb;
+    stroke-width: 3;
+  }
+
+  .msg {
+    padding: 0.5rem 0;
+  }
+</style>
+
+<div id="sylph">
   <svg
     width="8em"
     height="8em"
@@ -30,6 +50,6 @@
     </circle>
   </svg>
   {#if description}
-    <div class="msg"> {description} </div>
+    <div class="msg">{description}</div>
   {/if}
 </div>
