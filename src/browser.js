@@ -38,6 +38,10 @@ export function createTag(src) {
   return tag;
 }
 
+/**
+ * Join path components, returning an absolute path with a leading slash,
+ * no trailing slash, and exactly one slash between each component.
+ */
 export function joinPath(...components) {
   let result = components[0];
 

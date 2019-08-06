@@ -14,6 +14,9 @@ let root = browser.getMeta(
   'application-root',
   `${window.location.protocol}//${window.location.host}`
 );
+
+const targetSel = browser.getMeta('application-target');
+
 const storage = browser.getMeta('application-storage');
 
 // New resource base paths in query string
@@ -41,7 +44,7 @@ if (rootRule) {
   const newRoot = browser.applyQueryRule(window.location, rootRule);
   if (newRoot != null) {
     root = newRoot;
-    if (storage) localStorage.setItem(`${storage}.root`, JSON.stringify(bases));
+    if (storage) localStorage.setItem(`${storage}.root`, JSON.stringify(root));
   }
 }
 
@@ -51,11 +54,22 @@ if (storage) {
   if (storedRoot) root = JSON.parse(storedRoot);
 }
 
+// Rig self-destruct to politely remove svelte from DOM
+let app;
+function onDone() {
+  try {
+    app.$destroy();
+  } catch (err) {
+    // ignored (app may have taken over the target)
+  }
+}
+
 // Kick off the main event.
 const application = { assetQuery, bases, debug, files, root };
-const app = new App({
-  target: document.body,
-  props: { application, author, description },
+const target = targetSel ? document.querySelector(targetSel) : document.body;
+app = new App({
+  target,
+  props: { application, author, description, onDone },
 });
 
 export default app;

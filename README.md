@@ -1,15 +1,22 @@
 # Sylph
 
 This is a tiny but full-featured bootstrapper/loader for single-page
-applications. To use it, simply load it using a `script` tag on your
-index page. To ensure minimal interference with the app that is
-eventually loaded, put sylph and its script inside a special div
-with
+applications. It is configured using meta tags in your
+HTML document's `head` section.
+
+To use it, simply load it using a `script` tag on your
+index page and specifying the DOM element that Sylph's UI (and your own application) will occupy by specifying an `application-target` meta.
 
 ```html
-<div id="#sylph">
-  <script src="/scripts/sylph.js"/>
-</div>
+	<head>
+		<link href="/public/sylph.css" rel="stylesheet" media="screen"/>
+		<meta name="application-target" content="#root">
+	</head>
+	<body>
+	<div id="#root">
+		<script src="/public/sylph.js"/>
+	</div>
+	<body>
 ```
 
 Sylph is configured using meta tags in the `head` section of the page
@@ -19,6 +26,8 @@ description
 : App name displayed while loading.
 author
 : Creator/copyright info displayed while loading.
+application-target
+: CSS selector that Sylph UI (and your app) will be loaded in
 application-root
 : Absolute or relative base URL for application files
 application-bases

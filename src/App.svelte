@@ -7,8 +7,8 @@
   export let application = {};
   export let author;
   export let description;
+  export let onDone = () => true;
 
-  let done = false;
   let err = null;
 
   function onError(event) {
@@ -38,16 +38,18 @@
   // every file.
   log.setDebug(debug);
   let promise = Promise.resolve(true);
+  let loaded = 0;
   for (let i in files) {
     promise = promise
       .then(() => tryFileBase(i, 0))
+      .then(() => (loaded += 1))
       .catch(err => {
         onError({ message: err.message });
         log.error(err);
       });
   }
   promise.then(() => {
-    done = true;
+    if (loaded >= files.length) onDone();
   });
 </script>
 
@@ -66,6 +68,6 @@
 
 {#if err}
   <Oops message={err} />
-{:else if !done}
+{:else}
   <Splash {author} {description} />
 {/if}
