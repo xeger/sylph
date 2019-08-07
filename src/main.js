@@ -68,6 +68,7 @@ function onDone() {
 const application = { assetQuery, bases, debug, files, root };
 const target = targetSel ? document.querySelector(targetSel) : document.body;
 app = new App({
+  intro: true,
   target,
   props: { application, author, description, onDone },
 });
