@@ -1,5 +1,6 @@
 import App from './App.svelte';
 import * as browser from './browser';
+import * as storage from './storage';
 
 // HTML spec metas
 const author = browser.getMeta('author');
@@ -17,7 +18,7 @@ let root = browser.getMeta(
 
 const targetSel = browser.getMeta('application-target');
 
-const storage = browser.getMeta('application-storage');
+const storageKey = browser.getMeta('application-storage');
 
 // New resource base paths in query string
 const baseRules = browser.getMetaN('application-query-base');
@@ -27,16 +28,12 @@ if (baseRules) {
     .filter(b => b);
   if (newBases.length > 0) {
     bases = newBases;
-    if (storage)
-      localStorage.setItem(`${storage}.queryBase`, JSON.stringify(bases));
+    storage.set(storageKey, 'queryBase', bases);
   }
 }
 
 // New resource base paths in local storage
-if (storage) {
-  const storedBases = localStorage.getItem(`${storage}.queryBase`);
-  if (storedBases) bases = JSON.parse(storedBases);
-}
+bases = storage.get(storageKey, 'queryBase') || bases;
 
 // New resource root in query string
 const rootRule = browser.getMeta('application-query-root');
@@ -44,15 +41,12 @@ if (rootRule) {
   const newRoot = browser.applyQueryRule(window.location, rootRule);
   if (newRoot != null) {
     root = newRoot;
-    if (storage) localStorage.setItem(`${storage}.root`, JSON.stringify(root));
+    storage.set(storageKey, 'root', root);
   }
 }
 
 // New resource root in local storage
-if (storage) {
-  const storedRoot = localStorage.getItem(`${storage}.root`);
-  if (storedRoot) root = JSON.parse(storedRoot);
-}
+root = storage.get(storageKey, 'root') || root;
 
 // Rig self-destruct to politely remove svelte from DOM
 let app;
@@ -63,6 +57,9 @@ function onDone() {
     // ignored (app may have taken over the target)
   }
 }
+
+// Persist all changes.
+storage.commit(storageKey);
 
 // Kick off the main event.
 const application = { assetQuery, bases, debug, files, root };

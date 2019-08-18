@@ -1,17 +1,15 @@
 <script>
   import * as browser from "./browser";
   import * as log from "./log";
+  import * as storage from "./storage";
 
   export let color1 = "#ff0000";
   export let message = "Sorry, something went wrong. Try reloading.";
 
   function reload() {
     try {
-      const storage = browser.getMeta("application-storage");
-      if (storage) {
-        localStorage.removeItem(`${storage}.queryBase`);
-        localStorage.removeItem(`${storage}.root`);
-      }
+      const key = browser.getMeta("application-storage");
+      storage.reset(key);
     } catch (err) {
       log.error(err);
     }
