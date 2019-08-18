@@ -20,7 +20,7 @@
   }
 
   // Async helper that tries to load one file from one base.
-  const { assetQuery, bases, debug, files, root } = application;
+  const { assetQuery, bases, debug, files, root, splashImage } = application;
 
   function tryFileBase(i, j) {
     if (j < bases.length) {
@@ -69,5 +69,5 @@
 {#if err}
   <Oops message={err} />
 {:else}
-  <Splash {author} {description} />
+  <Splash {author} {description} src={splashImage} />
 {/if}

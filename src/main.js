@@ -8,8 +8,9 @@ const description = browser.getMeta('description');
 
 // Sylph custom metas (named using "application-" prefix for compliance.)
 const assetQuery = browser.getMeta('application-asset-query');
-let bases = browser.getMetaN('application-bases', ['/']);
 const debug = !!browser.getMeta('application-debug');
+const splashImage = browser.getMeta('application-splash-image');
+let bases = browser.getMetaN('application-bases', ['/']);
 let files = browser.getMetaN('application-files', ['main.js']);
 let root = browser.getMeta(
   'application-root',
@@ -62,7 +63,7 @@ function onDone() {
 storage.commit(storageKey);
 
 // Kick off the main event.
-const application = { assetQuery, bases, debug, files, root };
+const application = { assetQuery, bases, debug, files, root, splashImage };
 const target = targetSel ? document.querySelector(targetSel) : document.body;
 app = new App({
   intro: true,
