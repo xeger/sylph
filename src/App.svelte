@@ -19,9 +19,9 @@
     onError(event);
   }
 
-  // Async helper that tries to load one file from one base.
   const { assetQuery, bases, debug, files, root, splashImage } = application;
 
+  // Async helper that tries to load one file from one base.
   function tryFileBase(i, j) {
     if (j < bases.length) {
       let loc = browser.joinPath(root, bases[j], files[i]);
@@ -30,7 +30,8 @@
       return browser.loadContent(loc).catch(() => tryFileBase(i, j + 1));
     } else {
       log.debug(`give up ${files[i]} after ${bases.length} tries`);
-      throw new Error(`cannot locate ${files[i]}`);
+      if (!files[i].endsWith(".css"))
+        throw new Error(`cannot locate ${files[i]}`);
     }
   }
 

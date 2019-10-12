@@ -95,8 +95,7 @@ export function loadContent(src) {
 
     let cleanup = () => true;
     const onError = () => {
-      cleanup();
-      tag.remove();
+      cleanup(false);
       reject(src);
     };
     const onLoad = () => {
