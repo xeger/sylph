@@ -13,8 +13,7 @@
 <div id="sylph">
   {#if src}
     <img alt="splash screen" {src} />
-  {/if}
-  {#if description}
+  {:else if description}
     <div class="msg">{description}</div>
   {/if}
 </div>
