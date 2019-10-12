@@ -11,7 +11,7 @@
       const key = browser.getMeta("application-storage");
       storage.reset(key);
     } catch (err) {
-      log.error(err);
+      log.fatal(err);
     }
     window.location.reload();
   }

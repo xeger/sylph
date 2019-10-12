@@ -11,12 +11,10 @@
 
   let err = null;
 
-  function onError(event) {
-    err = event.message;
-  }
-  function onErrorLog(event) {
-    log.error(event);
-    onError(event);
+  function handleException(exception) {
+    const id = log.fatal(exception);
+    if (id) err = `Reference ID ${id}`;
+    else err = exception.message;
   }
 
   const { assetQuery, bases, debug, files, root, splashImage } = application;
@@ -44,10 +42,7 @@
     promise = promise
       .then(() => tryFileBase(i, 0))
       .then(() => (loaded += 1))
-      .catch(err => {
-        onError({ message: err.message });
-        log.error(err);
-      });
+      .catch(handleException);
   }
   promise.then(() => {
     if (loaded >= files.length) onDone();
