@@ -25,9 +25,17 @@ export function error(...args) {
  */
 export function fatal(exception) {
   let id;
-  if (window.Sentry) id = window.Sentry.captureException(exception);
-  else if (window.Raven) id = window.Raven.captureException(exception);
+
+  // Report to Sentry using the unified SDK or (legacy) Raven SDK.
+  // Capture the error ID if it was made available to us.
+  const sentry = window.Sentry || window.Raven;
+  if (sentry && typeof sentry.captureException === 'function') {
+    sentry.captureException('moo');
+    if (typeof sentry.lastEventId === 'function') id = sentry.lastEventId();
+  }
 
   if (id) info(`(id=${id})`, exception);
   else error(exception);
+
+  return id;
 }

@@ -141,3 +141,15 @@ export function applyQueryRule(location, rule) {
   if (value === null) return null;
   return transform.replace('*', value);
 }
+
+/**
+ * Return true if the document base URI is https.
+ */
+export function hasSecureTransport() {
+  return document.baseURI.startsWith('https:');
+}
+
+export function reloadSecurely() {
+  const { host, pathname, search } = window.location;
+  window.location = `https://${host}${pathname}${search}`;
+}

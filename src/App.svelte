@@ -3,6 +3,7 @@
   import * as log from "./log";
   import Oops from "./Oops.svelte";
   import Splash from "./Splash.svelte";
+  import Whoah from "./Whoah.svelte";
 
   export let application = {};
   export let author;
@@ -10,14 +11,13 @@
   export let onDone = () => true;
 
   let err = null;
+  let insecure = false;
 
   function handleException(exception) {
     const id = log.fatal(exception);
     if (id) err = `Reference ID ${id}`;
     else err = exception.message;
   }
-
-  const { assetQuery, bases, debug, files, root, splashImage } = application;
 
   // Async helper that tries to load one file from one base.
   function tryFileBase(i, j) {
@@ -33,20 +33,37 @@
     }
   }
 
-  // Load the files one at a time, in order, trying every base for
-  // every file.
+  const {
+    assetQuery,
+    bases,
+    debug,
+    files,
+    root,
+    splashImage,
+    transportSecurity
+  } = application;
+
   log.setDebug(debug);
-  let promise = Promise.resolve(true);
-  let loaded = 0;
-  for (let i in files) {
-    promise = promise
-      .then(() => tryFileBase(i, 0))
-      .then(() => (loaded += 1))
-      .catch(handleException);
+
+  // Ensure browser is complying with transport security policy.
+  if (transportSecurity === "strict" && !browser.hasSecureTransport()) {
+    // if (true) {
+    insecure = true;
+  } else {
+    // Load the files one at a time, in order, trying every base for
+    // every file.
+    let promise = Promise.resolve(true);
+    let loaded = 0;
+    for (let i in files) {
+      promise = promise
+        .then(() => tryFileBase(i, 0))
+        .then(() => (loaded += 1))
+        .catch(handleException);
+    }
+    promise.then(() => {
+      if (loaded >= files.length) onDone();
+    });
   }
-  promise.then(() => {
-    if (loaded >= files.length) onDone();
-  });
 </script>
 
 <style>
@@ -56,14 +73,19 @@
     flex-direction: column;
     font-family: sans-serif;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
     text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
   }
 </style>
 
 {#if err}
   <Oops message={err} />
+{:else if insecure}
+  <Whoah />
 {:else}
   <Splash {author} {description} src={splashImage} />
 {/if}

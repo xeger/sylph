@@ -3,8 +3,7 @@
   import * as log from "./log";
   import * as storage from "./storage";
 
-  export let color1 = "#ff0000";
-  export let message = "Sorry, something went wrong. Try reloading.";
+  export let message;
 
   function reload() {
     try {
@@ -58,7 +57,6 @@
     viewBox="0 0 1792 1792"
     xmlns="http://www.w3.org/2000/svg">
     <path
-      fill={color1}
       d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5
       279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5
       385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0

@@ -10,6 +10,7 @@ const description = browser.getMeta('description');
 const assetQuery = browser.getMeta('application-asset-query');
 const debug = !!browser.getMeta('application-debug');
 const splashImage = browser.getMeta('application-splash-image');
+const transportSecurity = browser.getMeta('application-transport-security');
 let bases = browser.getMetaN('application-bases', ['/']);
 let files = browser.getMetaN('application-files', ['main.js']);
 let root = browser.getMeta(
@@ -63,7 +64,15 @@ function onDone() {
 storage.commit(storageKey);
 
 // Kick off the main event.
-const application = { assetQuery, bases, debug, files, root, splashImage };
+const application = {
+  assetQuery,
+  bases,
+  debug,
+  files,
+  root,
+  splashImage,
+  transportSecurity,
+};
 const target = targetSel ? document.querySelector(targetSel) : document.body;
 app = new App({
   intro: true,
