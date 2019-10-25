@@ -3,8 +3,8 @@
   import * as log from "./log";
   import Oops from "./Oops.svelte";
   import Splash from "./Splash.svelte";
-  import Whoah from "./Whoah.svelte";
 
+  export let allowReset = false;
   export let application = {};
   export let author;
   export let description;
@@ -36,6 +36,9 @@
   const {
     assetQuery,
     bases,
+    contactEmail,
+    contactPhone,
+    errorImage,
     debug,
     files,
     root,
@@ -46,24 +49,22 @@
   log.setDebug(debug);
 
   // Ensure browser is complying with transport security policy.
-  if (transportSecurity === "strict" && !browser.hasSecureTransport()) {
-    // if (true) {
-    insecure = true;
-  } else {
-    // Load the files one at a time, in order, trying every base for
-    // every file.
-    let promise = Promise.resolve(true);
-    let loaded = 0;
-    for (let i in files) {
-      promise = promise
-        .then(() => tryFileBase(i, 0))
-        .then(() => (loaded += 1))
-        .catch(handleException);
-    }
-    promise.then(() => {
-      if (loaded >= files.length) onDone();
-    });
+  if (transportSecurity === "strict" && !browser.hasSecureTransport())
+    browser.reloadSecurely();
+
+  // Load the files one at a time, in order, trying every base for
+  // every file.
+  let promise = Promise.resolve(true);
+  let loaded = 0;
+  for (let i in files) {
+    promise = promise
+      .then(() => tryFileBase(i, 0))
+      .then(() => (loaded += 1))
+      .catch(handleException);
   }
+  promise.then(() => {
+    if (loaded >= files.length) onDone();
+  });
 </script>
 
 <style>
@@ -83,9 +84,12 @@
 </style>
 
 {#if err}
-  <Oops message={err} />
-{:else if insecure}
-  <Whoah />
+  <Oops
+    {allowReset}
+    {contactEmail}
+    {contactPhone}
+    errorMessage={err}
+    imgSrc={errorImage} />
 {:else}
-  <Splash {author} {description} src={splashImage} />
+  <Splash {author} {description} imgSrc={splashImage} />
 {/if}

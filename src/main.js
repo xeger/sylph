@@ -1,54 +1,64 @@
 import App from './App.svelte';
 import * as browser from './browser';
 import * as storage from './storage';
+import * as transform from './transform';
 
-// HTML spec metas
+// HTML spec metas;
 const author = browser.getMeta('author');
 const description = browser.getMeta('description');
 
-// Sylph custom metas (named using "application-" prefix for compliance.)
-const assetQuery = browser.getMeta('application-asset-query');
-const debug = !!browser.getMeta('application-debug');
-const splashImage = browser.getMeta('application-splash-image');
-const transportSecurity = browser.getMeta('application-transport-security');
-let bases = browser.getMetaN('application-bases', ['/']);
-let files = browser.getMetaN('application-files', ['main.js']);
+// Sylph custom metas.
+const assetQueryRule = browser.getMeta('sylph-xf-root-asset-query');
+const baseRules = browser.getMetaN('sylph-xf-query-base');
+const contactEmail = browser.getMeta('sylph-contact-email');
+const contactPhone = browser.getMeta('sylph-contact-phone');
+const debug = !!browser.getMeta('sylph-debug');
+const errorImage = browser.getMeta('sylph-error-image');
+const rootRule = browser.getMeta('sylph-xf-query-root');
+const splashImage = browser.getMeta('sylph-splash-image');
+const storageKey = browser.getMeta('sylph-storage');
+const targetSel = browser.getMeta('sylph-target');
+const transportSecurity = browser.getMeta('sylph-transport-security');
+
+let assetQuery = null;
+let hasOverrides = false;
+let bases = browser.getMetaN('sylph-bases', ['/']);
+let files = browser.getMetaN('sylph-files', ['main.js']);
 let root = browser.getMeta(
-  'application-root',
+  'sylph-root',
   `${window.location.protocol}//${window.location.host}`
 );
 
-const targetSel = browser.getMeta('application-target');
-
-const storageKey = browser.getMeta('application-storage');
-
-// New resource base paths in query string
-const baseRules = browser.getMetaN('application-query-base');
 if (baseRules) {
   const newBases = baseRules
-    .map(r => browser.applyQueryRule(window.location, r))
+    .map(r => transform.applyQueryRule(window.location, r))
     .filter(b => b);
   if (newBases.length > 0) {
+    hasOverrides = true;
     bases = newBases;
-    storage.set(storageKey, 'queryBase', bases);
   }
 }
 
-// New resource base paths in local storage
-bases = storage.get(storageKey, 'queryBase') || bases;
-
-// New resource root in query string
-const rootRule = browser.getMeta('application-query-root');
 if (rootRule) {
-  const newRoot = browser.applyQueryRule(window.location, rootRule);
+  const newRoot = transform.applyQueryRule(window.location, rootRule);
   if (newRoot != null) {
+    hasOverrides = true;
     root = newRoot;
     storage.set(storageKey, 'root', root);
   }
 }
 
-// New resource root in local storage
-root = storage.get(storageKey, 'root') || root;
+if (assetQueryRule) {
+  assetQuery = transform.applyRule(root, assetQueryRule);
+}
+
+if (hasOverrides) {
+  storage.set(storageKey, 'bases', bases);
+  storage.set(storageKey, 'root', root);
+} else {
+  bases = storage.get(storageKey, 'bases') || bases;
+  root = storage.get(storageKey, 'root') || root;
+}
 
 // Rig self-destruct to politely remove svelte from DOM
 let app;
@@ -67,7 +77,10 @@ storage.commit(storageKey);
 const application = {
   assetQuery,
   bases,
+  contactEmail,
+  contactPhone,
   debug,
+  errorImage,
   files,
   root,
   splashImage,
@@ -77,7 +90,7 @@ const target = targetSel ? document.querySelector(targetSel) : document.body;
 app = new App({
   intro: true,
   target,
-  props: { application, author, description, onDone },
+  props: { allowReset: hasOverrides, application, author, description, onDone },
 });
 
 export default app;

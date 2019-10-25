@@ -5,12 +5,12 @@ applications. It is configured using meta tags in your
 HTML document's `head` section.
 
 To use it, simply load it using a `script` tag on your
-index page and specifying the DOM element that Sylph's UI (and your own application) will occupy by specifying an `application-target` meta.
+index page and specifying the DOM element that Sylph's UI (and your own application) will occupy by specifying an `sylph-target` meta.
 
 ```html
 	<head>
 		<link href="/public/sylph.css" rel="stylesheet" media="screen"/>
-		<meta name="application-target" content="#root">
+		<meta name="sylph-target" content="#root">
 	</head>
 	<body>
 	<div id="#root">
@@ -26,15 +26,15 @@ description
 : App name displayed while loading.
 author
 : Creator/copyright info displayed while loading.
-application-target
+sylph-target
 : CSS selector that Sylph UI (and your app) will be loaded in
-application-root
+sylph-root
 : Absolute or relative base URL for application files
-application-bases
+sylph-bases
 : Comma-separated list of base paths under application root
-application-files
+sylph-files
 : Comma-separated list of subpaths (relative to base) to CSS and script files
-application-debug
+sylph-debug
 : Enable debug logging if present (regardless of content)
 
 To make developers happier, root and bases can be customized using query-string
@@ -42,8 +42,8 @@ patterns of your choosing. To let people experiment with local or pre-production
 UIs, you might:
 
 ```html
-	<meta name="application-query-base" content="ui=>alt/*">
-	<meta name="application-query-root" content="ui.local=>http://localhost:8080">
+	<meta name="sylph-xf-query-base" content="ui=>alt/*">
+	<meta name="sylph-xf-query-root" content="ui.local=>http://localhost:8080">
 ```
 
 This allows your developers to load `https://example.org?ui=foo` in order
@@ -54,6 +54,16 @@ use `https://example.org?ui.local` to run with a local dev-mode UI!
 
 If specified in the query string, root and base entirely replace the
 defaults specified in HTML metadata.
+
+Finally, Sylph can append a query string to the href of every
+asset it loads, conditional on the root from which they are being
+loaded. This allows special instructions to be sent to development
+servers. To ensure that hot reloading works when running with a
+`webpack-dev-server` on port 8081 and a remote server, you might:
+
+```html
+<meta name="sylph-xf-root-asset-query" content="127.0.0.1=>sockPort=8081>
+```
 
 ## Get started
 

@@ -3,11 +3,15 @@
   import * as log from "./log";
   import * as storage from "./storage";
 
-  export let message;
+  export let allowReset = false;
+  export let contactEmail = null;
+  export let contactPhone = null;
+  export let errorMessage;
+  export let imgSrc;
 
-  function reload() {
+  function reset() {
     try {
-      const key = browser.getMeta("application-storage");
+      const key = browser.getMeta("sylph-storage");
       storage.reset(key);
     } catch (err) {
       log.fatal(err);
@@ -17,10 +21,20 @@
 </script>
 
 <style>
+  big {
+    font-size: 1.5rem;
+  }
+
   button {
     color: #333;
     background-color: #f4f4f4;
+    border: 1px solid #333;
+    border-radius: 0.25rem;
+    font-weight: 400;
+    font-size: 1rem;
     outline: none;
+    padding: 0.2rem 0.75rem;
+    vertical-align: middle;
   }
 
   button:active {
@@ -31,45 +45,40 @@
     border-color: #666;
   }
 
+  img {
+    margin-bottom: 1rem;
+  }
   .msg {
+    line-height: 2rem;
     padding: 0.5rem 0;
   }
 
   .msg tt {
     color: #7f7f7f;
+    display: block;
+    margin-top: 1rem;
   }
 
   .act {
     padding: 0.5rem 0;
   }
-
-  svg * {
-    fill: red;
-    stroke: red;
-    stroke-width: 3;
-  }
 </style>
 
 <div id="sylph">
-  <svg
-    width="8em"
-    height="8em"
-    viewBox="0 0 1792 1792"
-    xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5
-      279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5
-      385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0
-      13 10 23t23 10h192q13 0
-      22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10
-      18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z" />
-  </svg>
+  {#if imgSrc}
+    <img alt="error" src={imgSrc} />
+  {/if}
   <div class="msg">
-    Sorry; something went wrong trying to load this page.
-    <br />
-    <tt>{message}</tt>
+    <big>Sorry, something went wrong.</big>
+    {#if contactEmail || contactPhone}
+      <br />
+      If this problem persists, please contact {[contactEmail, contactPhone].join(' or ')}.
+    {/if}
+    <tt>{errorMessage}</tt>
   </div>
-  <div class="act">
-    <button on:click={reload}>Reload Page</button>
-  </div>
+  {#if allowReset}
+    <div class="act">
+      <button on:click={reset}>Reset Overrides</button>
+    </div>
+  {/if}
 </div>

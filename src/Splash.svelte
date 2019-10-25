@@ -1,7 +1,7 @@
 <script>
   export let author;
   export let description;
-  export let src;
+  export let imgSrc;
 </script>
 
 <style>
@@ -11,8 +11,8 @@
 </style>
 
 <div id="sylph">
-  {#if src}
-    <img alt="splash screen" {src} />
+  {#if imgSrc}
+    <img alt="logo" {imgSrc} />
   {:else if description}
     <div class="msg">{description}</div>
   {/if}

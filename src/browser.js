@@ -129,20 +129,6 @@ export function removeAll(selector) {
 }
 
 /**
- * Detect a configuration override in the query string, if present,
- * and apply the specified rewrite rule to derive a new value for
- * some configuration parameter. Remove the matching QS parameter
- * (if found) before returning.
- */
-export function applyQueryRule(location, rule) {
-  const [paramName, transform] = rule.split('=>', 2);
-
-  const value = consumeQuery(location, paramName);
-  if (value === null) return null;
-  return transform.replace('*', value);
-}
-
-/**
  * Return true if the document base URI is https.
  */
 export function hasSecureTransport() {
