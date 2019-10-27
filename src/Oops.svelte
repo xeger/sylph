@@ -28,7 +28,7 @@
   button {
     color: #333;
     background-color: #f4f4f4;
-    border: 1px solid #333;
+    border: 1px solid #7f7f7f;
     border-radius: 0.25rem;
     font-weight: 400;
     font-size: 1rem;
@@ -47,7 +47,10 @@
 
   img {
     margin-bottom: 1rem;
+    max-width: 40vw;
+    max-height: 40vh;
   }
+
   .msg {
     line-height: 2rem;
     padding: 0.5rem 0;

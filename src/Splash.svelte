@@ -5,6 +5,12 @@
 </script>
 
 <style>
+  img {
+    margin-bottom: 1rem;
+    max-width: 40vw;
+    max-height: 40vh;
+  }
+
   .msg {
     padding: 0.5rem 0;
   }

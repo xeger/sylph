@@ -2,6 +2,7 @@ import App from './App.svelte';
 import * as browser from './browser';
 import * as storage from './storage';
 import * as transform from './transform';
+import * as util from './util';
 
 // HTML spec metas;
 const author = browser.getMeta('author');
@@ -34,6 +35,7 @@ if (baseRules) {
     .map(r => transform.applyQueryRule(window.location, r))
     .filter(b => b);
   if (newBases.length > 0) {
+    debugger;
     hasOverrides = true;
     bases = newBases;
   }
@@ -42,6 +44,7 @@ if (baseRules) {
 if (rootRule) {
   const newRoot = transform.applyQueryRule(window.location, rootRule);
   if (newRoot != null) {
+    debugger;
     hasOverrides = true;
     root = newRoot;
     storage.set(storageKey, 'root', root);
@@ -53,11 +56,16 @@ if (assetQueryRule) {
 }
 
 if (hasOverrides) {
+  // Remember settings for later
   storage.set(storageKey, 'bases', bases);
   storage.set(storageKey, 'root', root);
 } else {
-  bases = storage.get(storageKey, 'bases') || bases;
-  root = storage.get(storageKey, 'root') || root;
+  // Load remembered settings (if any)
+  const sb = storage.get(storageKey, 'bases');
+  const sr = storage.get(storageKey, 'root');
+  bases = sb || bases;
+  root = sr || root;
+  hasOverrides = !!(sb || sr);
 }
 
 // Rig self-destruct to politely remove svelte from DOM
