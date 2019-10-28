@@ -75,6 +75,10 @@ export function getMetaN(name, def) {
   return def;
 }
 
+export function isStylesheet(url) {
+  return url.match(/[.]css(\?.*)?/);
+}
+
 /**
  * Asynchronously load a script or CSS resource by adding it to
  * the DOM. Return a promise that resolves to src or rejects
@@ -84,7 +88,7 @@ export function loadContent(src) {
   return new Promise((resolve, reject) => {
     let tag;
 
-    if (src.endsWith('.css')) {
+    if (isStylesheet(src)) {
       tag = document.createElement('style');
       tag.textContent = '@import "' + src + '"';
     } else {

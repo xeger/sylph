@@ -28,7 +28,7 @@
       return browser.loadContent(loc).catch(() => tryFileBase(i, j + 1));
     } else {
       log.debug(`give up ${files[i]} after ${bases.length} tries`);
-      if (!files[i].endsWith(".css"))
+      if (!browser.isStylesheet(files[i]))
         throw new Error(`cannot locate ${files[i]}`);
     }
   }
