@@ -1,7 +1,7 @@
 let storage = null;
 
 function load(key) {
-  storage = JSON.parse(window.localStorage.getItem(key)) || {};
+  storage = JSON.parse(window.sessionStorage.getItem(key)) || {};
 }
 
 /**
@@ -30,12 +30,13 @@ export function set(key, subkey, value) {
  * Persist updates to local storage with one atomic write.
  */
 export function commit(key) {
-  if (key && storage) window.localStorage.setItem(key, JSON.stringify(storage));
+  if (key && storage)
+    window.sessionStorage.setItem(key, JSON.stringify(storage));
 }
 
 /**
  * Remove persisted state from local storage.
  */
 export function reset(key) {
-  window.localStorage.removeItem(key);
+  window.sessionStorage.removeItem(key);
 }
