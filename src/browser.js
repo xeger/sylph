@@ -1,4 +1,15 @@
 /**
+ * If the named parameter is present in location.query, return its value
+ * (including "" if the parameter is present with no `=`).
+ */
+export function readQuery(location, name) {
+  const { search } = location;
+  const result = search.match(new RegExp(`(\\?|&)${name}(=.+)?(&|$)`));
+  if (result) return result[2] ? result[2].slice(1) : '';
+  return null;
+}
+
+/**
  * If the named parameter is present in location.query, remove it
  * and return its value. Leave the rest of the query string undisturbed.
  */

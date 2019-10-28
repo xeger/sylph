@@ -37,8 +37,8 @@ export default {
     // browser on changes when not in production
     !production && livereload('public'),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
+    // If we're building for production (npm run build),
+    // then minify output
     production && terser(),
   ],
   watch: {

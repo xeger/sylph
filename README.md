@@ -70,7 +70,7 @@ servers. To ensure that hot reloading works when running with a
 Start [Rollup](https://rollupjs.org):
 
 ```bash
-npm run dev
+npm run start
 ```
 
 Navigate to [localhost:5000](http://localhost:5000).

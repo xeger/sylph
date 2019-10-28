@@ -26,10 +26,9 @@
   "scripts": {
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
-    "dev": "run-p start:dev autobuild",
     "lint": "eslint --quiet 'src/**/*.js' 'src/**/*.svelte'",
     "lint:fix": "eslint --fix 'src/**/*.js' 'src/**/*.svelte'",
-    "start": "sirv public --single",
+    "start": "run-p start:dev autobuild",
     "start:dev": "sirv public --single --dev"
   }
 }

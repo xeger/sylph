@@ -18,8 +18,7 @@ export function applyRule(value, rule) {
 /**
  * Detect a configuration override in the query string; if present,
  * and apply the specified rewrite rule to derive a new value for
- * some configuration parameter. Remove the matching QS parameter
- * (if found) before returning.
+ * some configuration parameter.
  *
  * The rule is a mapping e.g. `foo=>bar*` which is read as "if
  * the query string contains foo=something, return `barsomething`.
@@ -29,7 +28,15 @@ export function applyRule(value, rule) {
 export function applyQueryRule(location, rule) {
   const [paramName, transform] = rule.split('=>', 2);
 
-  const value = browser.consumeQuery(location, paramName);
+  const value = browser.readQuery(location, paramName);
   if (value === null) return null;
   return transform.replace('*', value);
+}
+
+/**
+ * Remove the rule's parameter from the query string, if found.
+ */
+export function cleanupQueryRule(location, rule) {
+  const [paramName] = rule.split('=>', 2);
+  browser.consumeQuery(location, paramName);
 }

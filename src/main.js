@@ -20,19 +20,20 @@ const storageKey = browser.getMeta('sylph-storage');
 const targetSel = browser.getMeta('sylph-target');
 const transportSecurity = browser.getMeta('sylph-transport-security');
 
+const { location } = window;
 let assetQuery = null;
 let hasOverrides = false;
 let bases = browser.getMetaN('sylph-bases', ['/']);
 let files = browser.getMetaN('sylph-files', ['main.js']);
 let root = browser.getMeta(
   'sylph-root',
-  `${window.location.protocol}//${window.location.host}`
+  `${location.protocol}//${location.host}`
 );
 
 if (baseRules) {
   const newBases = baseRules
-    .map(r => transform.applyQueryRule(window.location, r))
-    .filter(b => b);
+    .map(r => transform.applyQueryRule(location, r))
+    .filter(b => b !== null);
   if (newBases.length > 0) {
     hasOverrides = true;
     bases = newBases;
@@ -40,7 +41,7 @@ if (baseRules) {
 }
 
 if (rootRule) {
-  const newRoot = transform.applyQueryRule(window.location, rootRule);
+  const newRoot = transform.applyQueryRule(location, rootRule);
   if (newRoot != null) {
     hasOverrides = true;
     root = newRoot;
@@ -63,6 +64,10 @@ if (hasOverrides) {
   root = sr || root;
   hasOverrides = !!(sb || sr);
 }
+
+// Get rid of query string gunk
+if (baseRules) baseRules.forEach(r => transform.cleanupQueryRule(location, r));
+if (rootRule) transform.cleanupQueryRule(location, rootRule);
 
 // Rig self-destruct to politely remove svelte from DOM
 let app;
