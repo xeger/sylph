@@ -32,7 +32,7 @@ let root = browser.getMeta(
 
 if (baseRules) {
   const newBases = baseRules
-    .map(r => transform.applyQueryRule(location, r))
+    .map(r => transform.applyQueryRule(r, browser.readQuery))
     .filter(b => b !== null);
   if (newBases.length > 0) {
     hasOverrides = true;
@@ -41,7 +41,7 @@ if (baseRules) {
 }
 
 if (rootRule) {
-  const newRoot = transform.applyQueryRule(location, rootRule);
+  const newRoot = transform.applyQueryRule(rootRule, browser.readQuery);
   if (newRoot != null) {
     hasOverrides = true;
     root = newRoot;
@@ -66,8 +66,9 @@ if (hasOverrides) {
 }
 
 // Get rid of query string gunk
-if (baseRules) baseRules.forEach(r => transform.cleanupQueryRule(location, r));
-if (rootRule) transform.cleanupQueryRule(location, rootRule);
+if (baseRules)
+  baseRules.forEach(r => transform.cleanupQueryRule(r, browser.consumeQuery));
+if (rootRule) transform.cleanupQueryRule(rootRule, browser.consumeQuery);
 
 // Rig self-destruct to politely remove svelte from DOM
 let app;
