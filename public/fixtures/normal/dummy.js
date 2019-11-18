@@ -1,1 +1,1 @@
-document.body.appendChild(document.createTextNode('I am an app.'));
+document.body.appendChild(document.createTextNode('I am a normal app.'));

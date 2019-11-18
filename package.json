@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "cypress": "^3.6.1",
     "eslint": "^6.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
@@ -29,6 +30,7 @@
     "lint": "eslint --quiet 'src/**/*.js' 'src/**/*.svelte'",
     "lint:fix": "eslint --fix 'src/**/*.js' 'src/**/*.svelte'",
     "start": "run-p start:dev autobuild",
-    "start:dev": "sirv public --single --dev"
+    "start:dev": "sirv public --single --dev",
+    "test": "cypress run"
   }
 }
