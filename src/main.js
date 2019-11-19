@@ -30,9 +30,27 @@ let root = browser.getMeta(
   `${location.protocol}//${location.host}`
 );
 
+function readQuery(name) {
+  let value = browser.readQuery(name);
+  if (value === null) {
+    value = storage.get(storageKey, name);
+    // TODO: switch uniformly to undefined across whole codebase
+    if (value === undefined) value = null;
+  }
+  return value;
+}
+
+function consumeQuery(name) {
+  let value = browser.consumeQuery(name);
+  if (value !== null) {
+    storage.set(storageKey, name, value);
+  }
+  return value;
+}
+
 if (baseRules) {
   const newBases = baseRules
-    .map(r => transform.applyQueryRule(r, browser.readQuery))
+    .map(r => transform.applyQueryRule(r, readQuery))
     .filter(b => b !== null);
   if (newBases.length > 0) {
     hasOverrides = true;
@@ -41,7 +59,7 @@ if (baseRules) {
 }
 
 if (rootRule) {
-  const newRoot = transform.applyQueryRule(rootRule, browser.readQuery);
+  const newRoot = transform.applyQueryRule(rootRule, readQuery);
   if (newRoot != null) {
     hasOverrides = true;
     root = newRoot;
@@ -52,23 +70,10 @@ if (assetQueryRule) {
   assetQuery = transform.applyRule(root, assetQueryRule);
 }
 
-if (hasOverrides) {
-  // Remember overrides for later
-  storage.set(storageKey, 'bases', bases);
-  storage.set(storageKey, 'root', root);
-} else {
-  // Recall overrides
-  const sb = storage.get(storageKey, 'bases');
-  const sr = storage.get(storageKey, 'root');
-  bases = sb || bases;
-  root = sr || root;
-  hasOverrides = !!(sb || sr);
-}
-
 // Get rid of query string gunk
 if (baseRules)
-  baseRules.forEach(r => transform.cleanupQueryRule(r, browser.consumeQuery));
-if (rootRule) transform.cleanupQueryRule(rootRule, browser.consumeQuery);
+  baseRules.forEach(r => transform.cleanupQueryRule(r, consumeQuery));
+if (rootRule) transform.cleanupQueryRule(rootRule, consumeQuery);
 
 // Rig self-destruct to politely remove svelte from DOM
 let app;
