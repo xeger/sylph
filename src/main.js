@@ -21,7 +21,7 @@ const targetSel = browser.getMeta('sylph-target');
 const transportSecurity = browser.getMeta('sylph-transport-security');
 
 const { location } = window;
-let assetQuery = null;
+let assetQuery = undefined;
 let hasOverrides = false;
 let bases = browser.getMetaN('sylph-bases', ['/']);
 let files = browser.getMetaN('sylph-files', ['main.js']);
@@ -32,17 +32,15 @@ let root = browser.getMeta(
 
 function readQuery(name) {
   let value = browser.readQuery(name);
-  if (value === null) {
+  if (value === undefined) {
     value = storage.get(storageKey, name);
-    // TODO: switch uniformly to undefined across whole codebase
-    if (value === undefined) value = null;
   }
   return value;
 }
 
 function consumeQuery(name) {
   let value = browser.consumeQuery(name);
-  if (value !== null) {
+  if (value !== undefined) {
     storage.set(storageKey, name, value);
   }
   return value;
@@ -51,7 +49,7 @@ function consumeQuery(name) {
 if (baseRules) {
   const newBases = baseRules
     .map(r => transform.applyQueryRule(r, readQuery))
-    .filter(b => b !== null);
+    .filter(b => b !== undefined);
   if (newBases.length > 0) {
     hasOverrides = true;
     bases = newBases;
@@ -60,7 +58,7 @@ if (baseRules) {
 
 if (rootRule) {
   const newRoot = transform.applyQueryRule(rootRule, readQuery);
-  if (newRoot != null) {
+  if (newRoot != undefined) {
     hasOverrides = true;
     root = newRoot;
   }

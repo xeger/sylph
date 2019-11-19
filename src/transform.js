@@ -27,7 +27,7 @@ export function applyQueryRule(rule, readQuery) {
   const [paramName, transform] = rule.split('=>', 2);
 
   const value = readQuery(paramName);
-  if (value === null) return null;
+  if (value === undefined) return undefined;
   return transform.replace('*', value);
 }
 

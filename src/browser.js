@@ -6,7 +6,6 @@ export function readQuery(name) {
   const { search } = window.location;
   const result = search.match(new RegExp(`(\\?|&)${name}(=.+)?(&|$)`));
   if (result) return result[2] ? result[2].slice(1) : '';
-  return null;
 }
 
 /**
@@ -26,8 +25,6 @@ export function consumeQuery(name) {
 
     return result[2] ? result[2].slice(1) : '';
   }
-
-  return null;
 }
 
 /**
@@ -68,7 +65,7 @@ export function joinPath(...components) {
 }
 
 /**
- * Return the string content of a meta tag, or null if undefined.
+ * Return the string content of a meta tag, or undefined otherwise.
  */
 export function getMeta(name, def) {
   const tag = document.head.querySelector(`meta[name~=${name}][content]`);
