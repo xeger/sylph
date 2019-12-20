@@ -22,4 +22,16 @@ describe('resource root URL', () => {
       cy.contains('Sorry');
     });
   });
+
+  describe('using alternate root', () => {
+    it('reapplies persisted rule', () => {
+      cy.visit('/?ui.local');
+      cy.contains('Sorry');
+      cy.visit('/?ui=foo');
+      cy.contains('Sorry');
+      cy.window().then(win => win.sessionStorage.clear());
+      cy.reload();
+      cy.contains('normal app');
+    });
+  });
 });

@@ -33,7 +33,7 @@ let root = browser.getMeta(
 function readQuery(name) {
   let value = browser.readQuery(name);
   if (value === undefined) {
-    value = storage.get(storageKey, name);
+    value = storage.get(storageKey, `query.${name}`);
   }
   return value;
 }
@@ -41,7 +41,7 @@ function readQuery(name) {
 function consumeQuery(name) {
   let value = browser.consumeQuery(name);
   if (value !== undefined) {
-    storage.set(storageKey, name, value);
+    storage.set(storageKey, `query.${name}`, value);
   }
   return value;
 }
@@ -84,6 +84,10 @@ function onDone() {
 }
 
 // Persist all changes.
+if (hasOverrides) {
+  storage.set(storageKey, `actual.bases`, bases);
+  storage.set(storageKey, `actual.root`, root);
+}
 storage.commit(storageKey);
 
 // Kick off the main event.

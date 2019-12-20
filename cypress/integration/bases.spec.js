@@ -30,5 +30,17 @@ describe('resource base path(s)', () => {
       cy.contains('button', 'Reset Overrides').click();
       cy.contains('normal app');
     });
+
+    describe('using alternate base', () => {
+      it('reapplies persisted rule', () => {
+        cy.visit('/?ui=bar');
+        cy.contains('bar app');
+        cy.visit('/index-alt.html?ui=foo');
+        cy.contains('normal app');
+        cy.window().then(win => win.sessionStorage.clear());
+        cy.reload();
+        cy.contains('foo app');
+      });
+    });
   });
 });
