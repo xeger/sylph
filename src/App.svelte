@@ -23,9 +23,24 @@
   function tryFileBase(i, j) {
     if (j < bases.length) {
       let loc = browser.joinPath(root, bases[j], files[i]);
+      const description = `${bases[j]}/${files[i]}`;
       if (assetQuery) loc = `${loc}?${assetQuery}`;
-      log.debug("try", loc);
-      return browser.loadContent(loc).catch(() => tryFileBase(i, j + 1));
+      log.debug("try", description);
+      return browser.loadContent(loc).catch(err => {
+        if (err.message) {
+          log.error(`rejection (${err.__proto__})`, description, err.message);
+        } else if (err.error) {
+          log.error(
+            `rejection (${err.__proto__} > ${err.error.__proto__})`,
+            description,
+            err.error.message
+          );
+        } else {
+          const { type, eventPhase } = err;
+          log.info("rejection (CORS-blinded Error, likely 4xx)", description);
+        }
+        tryFileBase(i, j + 1);
+      });
     } else {
       log.debug(`give up ${files[i]} after ${bases.length} tries`);
       if (!browser.isStylesheet(files[i]))

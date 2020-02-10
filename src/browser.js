@@ -106,9 +106,9 @@ export function loadContent(src) {
     }
 
     let cleanup = () => true;
-    const onError = () => {
+    const onError = e => {
       cleanup(false);
-      reject(src);
+      reject(e);
     };
     const onLoad = () => {
       cleanup(true);
