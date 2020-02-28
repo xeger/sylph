@@ -39,7 +39,7 @@ export default {
 
     // If we're building for production (npm run build),
     // then minify output
-    production && terser(),
+    production && terser({ ecma: 5, safari10: true }),
   ],
   watch: {
     clearScreen: false,
