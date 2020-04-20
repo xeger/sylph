@@ -10,7 +10,7 @@ export default {
   input: 'src/main.js',
   output: {
     sourcemap: true,
-    format: 'umd',
+    format: 'iife',
     name: 'app',
     file: 'public/sylph.js',
   },
