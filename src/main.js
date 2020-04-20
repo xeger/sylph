@@ -1,5 +1,6 @@
 import App from './App.svelte';
 import * as browser from './browser';
+import * as log from './log';
 import * as storage from './storage';
 import * as transform from './transform';
 
@@ -77,6 +78,7 @@ if (rootRule) transform.cleanupQueryRule(rootRule, consumeQuery);
 let app;
 function onDone() {
   try {
+    log.debug('all done');
     app.$destroy();
   } catch (err) {
     // ignored (app may have taken over the target)

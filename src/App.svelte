@@ -23,9 +23,8 @@
   function tryFileBase(i, j) {
     if (j < bases.length) {
       let loc = browser.joinPath(root, bases[j], files[i]);
-      const description = `${bases[j]}/${files[i]}`;
       if (assetQuery) loc = `${loc}?${assetQuery}`;
-      log.debug("try", description);
+      log.debug("try", loc);
       return browser.loadContent(loc).catch(err => {
         if (err.message) {
           log.error(`rejection (${err.__proto__})`, description, err.message);
