@@ -5,7 +5,8 @@ applications. It is configured using meta tags in your
 HTML document's `head` section.
 
 To use it, simply load it using a `script` tag on your
-index page and specifying the DOM element that Sylph's UI (and your own application) will occupy by specifying an `sylph-target` meta.
+index page and specifying the DOM element that Sylph's UI (and your
+own application) will occupy by specifying a `sylph-target` meta.
 
 ```html
 <head>
@@ -19,23 +20,28 @@ index page and specifying the DOM element that Sylph's UI (and your own applicat
 </body>
 ```
 
-Sylph is configured using meta tags in the `head` section of the page
-into which it is loaded. the following meta tags are supported:
+The following configuration tags let you change Sylph's behavior.
 
 description
 : App name displayed while loading.
+
 author
 : Creator/copyright info displayed while loading.
+
 sylph-target
-: CSS selector that Sylph UI (and your app) will be loaded in
+: CSS selector that Sylph UI (and your app) will be loaded in; defaults to `body`.
+
 sylph-root
-: Absolute or relative base URL for application files
+: Absolute or relative base URL for application files; defaults to `window.location.host`.
+
 sylph-base
-: Base path under application root
+: Base path under application root; defaults to `/`.
+
 sylph-files
-: Comma-separated list of subpaths (relative to base) to CSS and script files
+: Comma-separated list of subpaths (relative to base) to CSS and script files; defaults to `main.js`.
+
 sylph-debug
-: Enable debug logging if present (regardless of content)
+: Enable debug logging if present (regardless of content).
 
 To make developers happier, root and bases can be customized using query-string
 patterns of your choosing. To let people experiment with local or pre-production
@@ -81,36 +87,3 @@ Edit index.html and change the root or files to refer to something
 nonexistent; notice that Sylph displays an error. Use dev tools to
 slow down the network; notice that Sylph displays a splash screen
 with a spinner.
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
-```
