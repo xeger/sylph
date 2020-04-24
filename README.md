@@ -8,15 +8,15 @@ To use it, simply load it using a `script` tag on your
 index page and specifying the DOM element that Sylph's UI (and your own application) will occupy by specifying an `sylph-target` meta.
 
 ```html
-	<head>
-		<link href="/public/sylph.css" rel="stylesheet" media="screen"/>
-		<meta name="sylph-target" content="#root">
-	</head>
-	<body>
-	<div id="#root">
-		<script src="/public/sylph.js"/>
-	</div>
-	<body>
+<head>
+  <link href="/public/sylph.css" rel="stylesheet" media="screen" />
+  <meta name="sylph-target" content="#root" />
+</head>
+<body>
+  <div id="#root">
+    <script src="/public/sylph.js" />
+  </div>
+</body>
 ```
 
 Sylph is configured using meta tags in the `head` section of the page
@@ -30,8 +30,8 @@ sylph-target
 : CSS selector that Sylph UI (and your app) will be loaded in
 sylph-root
 : Absolute or relative base URL for application files
-sylph-bases
-: Comma-separated list of base paths under application root
+sylph-base
+: Base path under application root
 sylph-files
 : Comma-separated list of subpaths (relative to base) to CSS and script files
 sylph-debug
@@ -42,8 +42,8 @@ patterns of your choosing. To let people experiment with local or pre-production
 UIs, you might:
 
 ```html
-	<meta name="sylph-xf-query-base" content="ui=>alt/*">
-	<meta name="sylph-xf-query-root" content="ui.local=>http://localhost:8080">
+<meta name="sylph-xf-query-base" content="ui=>alt/*" />
+<meta name="sylph-xf-query-root" content="ui.local=>http://localhost:8080" />
 ```
 
 This allows your developers to load `https://example.org?ui=foo` in order
