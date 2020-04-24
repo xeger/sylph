@@ -20,36 +20,31 @@
   }
 
   // Async helper that tries to load one file from one base.
-  function tryFileBase(i, j) {
-    if (j < bases.length) {
-      let loc = browser.joinPath(root, bases[j], files[i]);
-      if (assetQuery) loc = `${loc}?${assetQuery}`;
-      log.debug("try", loc);
-      return browser.loadContent(loc).catch(err => {
-        if (err.message) {
-          log.error(`rejection (${err.__proto__})`, description, err.message);
-        } else if (err.error) {
-          log.error(
-            `rejection (${err.__proto__} > ${err.error.__proto__})`,
-            description,
-            err.error.message
-          );
-        } else {
-          const { type, eventPhase } = err;
-          log.info("rejection (CORS-blinded Error, likely 4xx)", description);
-        }
-        return tryFileBase(i, j + 1);
-      });
-    } else {
-      log.debug(`give up ${files[i]} after ${bases.length} tries`);
-      if (!browser.isStylesheet(files[i]))
-        return Promise.reject(Error(`cannot locate ${files[i]}`));
-    }
+  function tryFile(file) {
+    let loc = browser.joinPath(root, base, file);
+    if (assetQuery) loc = `${loc}?${assetQuery}`;
+    log.debug("try", loc);
+    return browser.loadContent(loc).catch(err => {
+      if (err.message) {
+        log.error(`rejection (${err.__proto__})`, description, err.message);
+      } else if (err.error) {
+        log.error(
+          `rejection (${err.__proto__} > ${err.error.__proto__})`,
+          description,
+          err.error.message
+        );
+      } else {
+        const { type, eventPhase } = err;
+        log.info("rejection (CORS-blinded Error, likely 4xx)", description);
+      }
+      if (!browser.isStylesheet(file))
+        return Promise.reject(Error(`cannot locate ${file}`));
+    });
   }
 
   const {
     assetQuery,
-    bases,
+    base,
     contactEmail,
     contactPhone,
     errorImage,
@@ -66,19 +61,11 @@
   if (transportSecurity === "strict" && !browser.hasSecureTransport())
     browser.reloadSecurely();
 
-  // Load the files one at a time, in order, trying every base for
-  // every file.
-  let promise = Promise.resolve(true);
-  let loaded = 0;
-  for (let i in files) {
-    promise = promise
-      .then(() => tryFileBase(i, 0))
-      .then(() => (loaded += 1))
-      .catch(handleException);
-  }
-  promise.then(() => {
-    if (loaded >= files.length) onDone();
-  });
+  const fileRequests = files.map(f => tryFile(f));
+  fileRequests.forEach(request => request.catch(handleException));
+  Promise.all(fileRequests)
+    .then(onDone)
+    .catch(() => {});
 </script>
 
 <style>

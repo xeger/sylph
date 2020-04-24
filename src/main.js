@@ -24,7 +24,7 @@ const transportSecurity = browser.getMeta('sylph-transport-security');
 const { location } = window;
 let assetQuery = undefined;
 let hasOverrides = false;
-let bases = browser.getMetaN('sylph-bases', ['/']);
+let base = browser.getMeta('sylph-base', '/');
 let files = browser.getMetaN('sylph-files', ['main.js']);
 let root = browser.getMeta(
   'sylph-root',
@@ -48,12 +48,12 @@ function consumeQuery(name) {
 }
 
 if (baseRules) {
-  const newBases = baseRules
+  const newBase = baseRules
     .map(r => transform.applyQueryRule(r, readQuery))
-    .filter(b => b !== undefined);
-  if (newBases.length > 0) {
+    .find(b => b !== undefined);
+  if (newBase != undefined) {
     hasOverrides = true;
-    bases = newBases;
+    base = newBase;
   }
 }
 
@@ -87,7 +87,7 @@ function onDone() {
 
 // Persist all changes.
 if (hasOverrides) {
-  storage.set(storageKey, `actual.bases`, bases);
+  storage.set(storageKey, `actual.base`, base);
   storage.set(storageKey, `actual.root`, root);
 }
 storage.commit(storageKey);
@@ -95,7 +95,7 @@ storage.commit(storageKey);
 // Kick off the main event.
 const application = {
   assetQuery,
-  bases,
+  base,
   contactEmail,
   contactPhone,
   debug,

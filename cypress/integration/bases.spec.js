@@ -2,11 +2,7 @@ describe('resource base path(s)', () => {
   it('configured via sylph-base', () => {
     cy.visit('/');
     cy.contains('normal app.');
-    cy.get('meta[name="sylph-bases"]').should(
-      'have.attr',
-      'content',
-      '/does-not-exist,/normal'
-    );
+    cy.get('meta[name="sylph-base"]').should('have.attr', 'content', '/normal');
   });
 
   describe('base query rule', () => {
